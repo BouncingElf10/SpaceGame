@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 public partial class Player : CharacterBody3D
 {
@@ -35,7 +36,16 @@ public partial class Player : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		float dt = (float)delta;
+		float dt = (float) delta;
+		
+		Array<Node> children = GetParent<Node3D>().GetChildren();
+		Planet planet = GetClosestPlanet(children);
+		
+		if (planet == null)
+		{
+			GD.PrintErr("No planet found!: " + children );
+			return;
+		}
 		
 		Vector3 turn = new Vector3
 		(
@@ -46,9 +56,9 @@ public partial class Player : CharacterBody3D
 		_mouse = Vector2.Zero;
 		_turn = _turn.Lerp(turn, 1f - Mathf.Exp(-TurnResponse * dt));
 
-		RotateObjectLocal(Vector3.Right, _turn.X * dt);
-		RotateObjectLocal(Vector3.Up, _turn.Y * dt);
-		RotateObjectLocal(Vector3.Back, _turn.Z * dt);
+		RotateObjectLocal(planet.GetRight(Position), _turn.X * dt);
+		RotateObjectLocal(planet.GetUp(Position), _turn.Y * dt);
+		RotateObjectLocal(planet.GetBack(Position), _turn.Z * dt);
 		Basis = Basis.Orthonormalized();
 
 		Vector3 thrust = new Vector3
@@ -58,7 +68,28 @@ public partial class Player : CharacterBody3D
 			Input.GetAxis("move_forward", "move_back")
 		);
 
-		Velocity = Velocity * Drag + Basis * thrust.LimitLength() * MovementSpeed * (float) delta;
+		Velocity = Velocity * Drag + Basis * thrust.LimitLength() * MovementSpeed * (float) delta + planet.GetGravityVector(Position);
 		MoveAndSlide();
+	}
+
+	private Planet GetClosestPlanet(Array<Node> children)
+	{
+		Planet closest = null;
+		float closestDist = float.MaxValue;
+
+		foreach (Node child in children)
+		{
+			if (child is Planet planet)
+			{
+				float distance = planet.GlobalPosition.DistanceSquaredTo(GlobalPosition);
+				if (distance < closestDist)
+				{
+					closestDist = distance;
+					closest = planet;
+				}
+			}
+		}
+
+		return closest;
 	}
 }

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dleptsvdl0u5f"]
 
 [ext_resource type="PackedScene" uid="uid://dqflopox7uhp7" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://dh5qg3ly7ppbu" path="res://planet.tscn" id="2_0xm2m"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7dm0k"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -23,10 +24,8 @@ environment = SubResource("Environment_0xm2m")
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Floor" type="CSGBox3D" parent="." unique_id=1371177240]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.053979278, 0)
-use_collision = true
-size = Vector3(20, 0.1, 20)
-
 [node name="Player" parent="." unique_id=295273794 instance=ExtResource("1_ig7tw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Planet" parent="." unique_id=1841273190 instance=ExtResource("2_0xm2m")]
+transform = Transform3D(500, 0, 0, 0, 500, 0, 0, 0, 500, 0, 0, -506.26166)
