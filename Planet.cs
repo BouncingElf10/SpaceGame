@@ -4,6 +4,8 @@ using System;
 public partial class Planet : Node3D
 {
 	public const float GravityConstant = 3f;
+	//public const float GravityConstant = 0f;
+	private float _radius = 0f;
 	
 	public override void _Ready()
 	{
@@ -15,8 +17,17 @@ public partial class Planet : Node3D
 		
 	}
 
+	public void SetRadius(float radius)
+	{
+		_radius = radius;
+	}
+
+	public float GetRadius()
+	{
+		return _radius * Scale.X;
+	}
+
 	public const float AtmosphereHeight = 0.3f;
-	public float Radius => Scale.X * 0.5f;
 
 	public bool IsInAtmosphere(Vector3 playerPos)
 	{
@@ -25,18 +36,18 @@ public partial class Planet : Node3D
 	
 	public float GetAltitude(Vector3 playerPos)
 	{
-		return Position.DistanceTo(playerPos) - Radius;
+		return Position.DistanceTo(playerPos) - GetRadius();
 	}
 	
 	public float GetAtmosphereEffect(Vector3 playerPos)
 	{
 		float altitude = GetAltitude(playerPos);
-		return Math.Clamp(1 - altitude / (Radius * AtmosphereHeight), 0, 1);
+		return Math.Clamp(1 - altitude / (GetRadius() * AtmosphereHeight), 0, 1);
 	}
 
 	public float GetGravityEffect(Vector3 playerPos)
 	{
-		float radius = Scale.X * ((Area3D) GetNode("Gravity Area")).Scale.X;
+		float radius = Scale.X * GetNode<Area3D>("Gravity Area").Scale.X;
 		float distance = Position.DistanceTo(playerPos);
 		return Math.Clamp(1 - distance / radius, 0, 1);
 	}

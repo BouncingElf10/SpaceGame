@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dh5qg3ly7ppbu"]
 
 [ext_resource type="Script" uid="uid://bwj1cmqqpn27j" path="res://Planet.cs" id="1_1odxm"]
+[ext_resource type="Script" uid="uid://cd3blx5hcapwt" path="res://PlanetGenerator.cs" id="2_mtr83"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_fmqxq"]
 
@@ -19,10 +20,11 @@ shape = SubResource("SphereShape3D_fmqxq")
 
 [node name="Chunks" type="Node3D" parent="." unique_id=2045046661]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1609075671]
+[node name="PlanetGenerator" type="StaticBody3D" parent="." unique_id=1609075671]
+script = ExtResource("2_mtr83")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1019608376]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlanetGenerator" unique_id=1019608376]
 shape = SubResource("SphereShape3D_ytfct")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=51239595]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlanetGenerator" unique_id=51239595]
 mesh = SubResource("SphereMesh_fmqxq")
