@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dqflopox7uhp7"]
 
 [ext_resource type="Script" uid="uid://bqpapq1ff2353" path="res://Player.cs" id="1_4flbx"]
-[ext_resource type="Script" uid="uid://ccs46k7ua6bdu" path="res://Camera.cs" id="3_cam"]
 [ext_resource type="PackedScene" uid="uid://c5iimuquik1np" path="res://spaceship.blend" id="2_onrkg"]
+[ext_resource type="Script" uid="uid://ccs46k7ua6bdu" path="res://Camera.cs" id="3_cam"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4flbx"]
 size = Vector3(1.6367188, 0.2692871, 1.5805664)
@@ -15,8 +15,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0005187988, -0.10848048, -0
 shape = SubResource("BoxShape3D_4flbx")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1872321935]
-script = ExtResource("3_cam")
 transform = Transform3D(1, 0, 0, 0, 0.97909045, 0.20342557, 0, -0.20342557, 0.97909045, 0, 1.0428745, 2.486294)
+script = ExtResource("3_cam")
 
 [node name="spaceship" parent="." unique_id=2037893048 instance=ExtResource("2_onrkg")]
-transform = Transform3D(-0.104995996, 0, 0.0009162902, 0, 0.105, 0, -0.0009162902, 0, -0.104995996, -0.09010708, -0.4172976, -0.40455866)
+transform = Transform3D(-0.104995996, 0, 0.0009162902, 0, 0.105, 0, -0.0009162902, 0, -0.104995996, 0, -0.417, -0.405)

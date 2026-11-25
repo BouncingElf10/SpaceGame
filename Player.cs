@@ -18,12 +18,19 @@ public partial class Player : CharacterBody3D
 
 	public override void _UnhandledInput(InputEvent e)
 	{
-		if (e is InputEventMouseMotion motion && Input.MouseMode == Input.MouseModeEnum.Captured && !Input.IsMouseButtonPressed(MouseButton.Right))
+		if (e is InputEventMouseMotion motion && Input.MouseMode == Input.MouseModeEnum.Captured &&
+		    !Input.IsMouseButtonPressed(MouseButton.Right))
+		{
 			_mouse += motion.Relative;
+		}
 		else if (e is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left })
+		{
 			Input.MouseMode = Input.MouseModeEnum.Captured;
+		}
 		else if (e.IsActionPressed("ui_cancel"))
+		{
 			Input.MouseMode = Input.MouseModeEnum.Visible;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)

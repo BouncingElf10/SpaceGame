@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dh5qg3ly7ppbu"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fmqxq"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_fmqxq"]
+
+[node name="Planet" type="Node3D" unique_id=1841273190]
+
+[node name="Gravity Area" type="Area3D" parent="." unique_id=1123310752]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Gravity Area" unique_id=1240042273]
+shape = SubResource("SphereShape3D_fmqxq")
+
+[node name="Chunks" type="Node3D" parent="." unique_id=2045046661]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=51239595]
+mesh = SubResource("SphereMesh_fmqxq")
