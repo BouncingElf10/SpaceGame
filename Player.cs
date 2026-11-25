@@ -3,9 +3,10 @@ using Godot.Collections;
 
 public partial class Player : CharacterBody3D
 {
-	public const float Drag = 0.9999f;
-	public const float AtmosphereDrag = 1f;
-	public const float MovementSpeed = 5f;
+	public const float Drag = 0.995f;
+	public const float AtmosphereDrag = 4f;
+	public const float MovementSpeed = 10f;
+	public const float SpeedPerAltitude = 0.02f;
 	public const float TurnSpeed = 1f;
 	public const float MouseSensitivity = 0.0003f;
 	public const float TurnResponse = 8f;
@@ -60,14 +61,8 @@ public partial class Player : CharacterBody3D
 
 		RotateObjectLocal(Vector3.Right, _turn.X * dt);
 		RotateObjectLocal(Vector3.Back, _turn.Z * dt);
-		if (planet.IsInAtmosphere(Position))
-		{
-			Rotate(planet.GetUp(Position), _turn.Y * dt);
-		}
-		else
-		{
-			RotateObjectLocal(Vector3.Up, _turn.Y * dt);
-		}
+		float atmosphere = planet.GetAtmosphereEffect(Position);
+		Rotate(Basis.Y.Lerp(planet.GetUp(Position), atmosphere).Normalized(), _turn.Y * dt);
 		
 		Basis = Basis.Orthonormalized();
 
@@ -78,7 +73,8 @@ public partial class Player : CharacterBody3D
 			Input.GetAxis("move_forward", "move_back")
 		);
 
-		Velocity = Velocity * Drag * (1f - planet.GetAtmosphereEffect(Position) * AtmosphereDrag * dt) + Basis * thrust.LimitLength() * MovementSpeed * (float) delta + planet.GetGravityVector(Position) * dt;
+		float speed = MovementSpeed * (1f + Mathf.Max(planet.GetAltitude(Position), 0f) * SpeedPerAltitude);
+		Velocity = Velocity * Drag * (1f - atmosphere * AtmosphereDrag * dt) + Basis * thrust.LimitLength() * speed * (float) delta + planet.GetGravityVector(Position) * dt;
 		MoveAndSlide();
 	}
 
