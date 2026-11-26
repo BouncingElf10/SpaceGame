@@ -7,9 +7,14 @@ public partial class PlanetGenerator : StaticBody3D
 {	
 	private const float Radius = 1.0f;
 	private const int Subdivisions = 8;
+	private const float Bumpiness = 0.08f;
+
+	private readonly FastNoiseLite _noise = new FastNoiseLite() { Frequency = 10.5f, FractalType = FastNoiseLite.FractalTypeEnum.None };
 
 	public override void _Ready()
 	{
+		var start = Time.GetUnixTimeFromSystem();
+		
 		var st = new SurfaceTool();
 		st.Begin(Mesh.PrimitiveType.Triangles);
 
@@ -17,12 +22,20 @@ public partial class PlanetGenerator : StaticBody3D
 		GetParent<Planet>().SetRadius(Radius);
 
 		st.GenerateNormals();
-		GetNode<MeshInstance3D>("MeshInstance3D").Mesh = st.Commit();
+		var mesh = st.Commit();
+		GetNode<MeshInstance3D>("MeshInstance3D").Mesh = mesh;
+		GetNode<CollisionShape3D>("CollisionShape3D").Shape = mesh.CreateTrimeshShape();
 		
-		GetNode<CollisionShape3D>("CollisionShape3D").Scale = new Vector3(Radius * 2, Radius * 2, Radius * 2);
+		var timeTook = Time.GetUnixTimeFromSystem() - start;
+		GD.Print("Took " + timeTook + "s");
+	}
+	
+	private float Height(Vector3 dir)
+	{
+		return _noise.GetNoise3Dv(dir) * Bumpiness;
 	}
 
-	private static void GenerateIcosphere(SurfaceTool st, float radius)
+	private void GenerateIcosphere(SurfaceTool st, float radius)
 	{
 		float t = (1f + Mathf.Sqrt(5f)) / 2f;
 
@@ -76,11 +89,13 @@ public partial class PlanetGenerator : StaticBody3D
 			faces = next;
 		}
 
+		Vector3 Lump(Vector3 p) => p * (radius + Height(p));
+
 		for (int i = 0; i < faces.Count; i += 3)
 		{
-			st.AddVertex(v[faces[i]] * radius);
-			st.AddVertex(v[faces[i + 2]] * radius);
-			st.AddVertex(v[faces[i + 1]] * radius);
+			st.AddVertex(Lump(v[faces[i]]));
+			st.AddVertex(Lump(v[faces[i + 2]]));
+			st.AddVertex(Lump(v[faces[i + 1]]));
 		}
 	}
 }
