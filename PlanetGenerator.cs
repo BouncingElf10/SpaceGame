@@ -18,6 +18,8 @@ public partial class PlanetGenerator : StaticBody3D
 
 		st.GenerateNormals();
 		GetNode<MeshInstance3D>("MeshInstance3D").Mesh = st.Commit();
+		
+		GetNode<CollisionShape3D>("CollisionShape3D").Scale = new Vector3(Radius * 2, Radius * 2, Radius * 2);
 	}
 
 	private static void GenerateIcosphere(SurfaceTool st, float radius)
